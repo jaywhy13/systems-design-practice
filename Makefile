@@ -39,7 +39,7 @@ install-frontend:
 
 start-backend:
 	@echo "Starting Django backend server..."
-	@. venv/bin/activate && cd backend && python manage.py runserver 8000 
+	@. venv/bin/activate && cd backend && python manage.py runserver 0.0.0.0:8000 
 
 start-frontend:
 	@echo "Starting React frontend server..."
