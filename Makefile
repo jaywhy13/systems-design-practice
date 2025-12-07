@@ -1,4 +1,4 @@
-.PHONY: help install install-backend install-frontend start start-backend start-frontend start-all stop clean migrate
+.PHONY: help install install-backend install-frontend start start-backend start-frontend start-all start-all-background stop clean migrate
 
 # Default target
 help:
@@ -13,6 +13,7 @@ help:
 	@echo "  start            - Start both backend and frontend servers"
 	@echo "  start-backend    - Start Django backend server"
 	@echo "  start-frontend   - Start React frontend server"
+	@echo "  start-all-background - Start backend and frontend servers in the background"
 	@echo "  stop             - Stop all running servers"
 	@echo ""
 	@echo "Database:"
@@ -20,6 +21,7 @@ help:
 	@echo ""
 	@echo "Maintenance:"
 	@echo "  clean            - Clean up temporary files"
+
 
 # Installation commands
 install: install-backend install-frontend
@@ -35,9 +37,6 @@ install-frontend:
 	@cd frontend && npm install
 	@echo "Frontend dependencies installed successfully!"
 
-# Development server commands
-start: start-backend start-frontend
-
 start-backend:
 	@echo "Starting Django backend server..."
 	@. venv/bin/activate && cd backend && python manage.py runserver 8000 
@@ -45,29 +44,26 @@ start-backend:
 start-frontend:
 	@echo "Starting React frontend server..."
 	@cd frontend && npm start 
-	
-start-all:
-	@echo "Starting both servers..."
-	@make start-backend
-	@sleep 2
-	@make start-frontend
-	@echo "Both servers are running!"
-	@echo "Frontend: http://localhost:3000"
-	@echo "Backend:  http://localhost:8000"
-	@echo "Press Ctrl+C to stop all servers"
-
-# Stop servers
-stop:
-	@echo "Stopping all servers..."
-	@pkill -f "python manage.py runserver" || true
-	@pkill -f "react-scripts" || true
-	@echo "All servers stopped"
 
 # Database commands
 migrate:
 	@echo "Running Django migrations..."
 	@. venv/bin/activate && cd backend && python manage.py migrate
 	@echo "Migrations completed!"
+
+start-all-background:
+	@echo "Starting Django backend server in background..."
+	@. venv/bin/activate && cd backend && nohup python manage.py runserver 8000 > backend.log 2>&1 &
+	@echo "Starting React frontend server in background..."
+	@cd frontend && nohup npm start > frontend.log 2>&1 &
+	@echo "Both servers started in background."
+
+stop:
+	@echo "Stopping Django backend server..."
+	@pkill -f "python manage.py runserver 8000" || echo "Backend server not running."
+	@echo "Stopping React frontend server..."
+	@pkill -f "npm start" || echo "Frontend server not running."
+	@echo "All servers stopped."
 
 # Cleanup
 clean:
