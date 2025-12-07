@@ -10,7 +10,7 @@ function App() {
   const [currentInterview, setCurrentInterview] = useState(null);
   const [interviews, setInterviews] = useState([]);
 
-  const API_BASE_URL = 'http://localhost:8000/api/interview';
+  const API_BASE_URL = "http://18.208.165.206:8000/api/interview";
 
   useEffect(() => {
     fetchInterviews();
