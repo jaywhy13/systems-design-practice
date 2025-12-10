@@ -8,17 +8,32 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('interview', '0001_initial'),
+        ("interview", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ImageUpload',
+            name="ImageUpload",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('image', models.ImageField(upload_to='interview_images/')),
-                ('uploaded_at', models.DateTimeField(auto_now_add=True)),
-                ('message', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='interview.message')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="interview_images/")),
+                ("uploaded_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "message",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="interview.message",
+                    ),
+                ),
             ],
         ),
     ]

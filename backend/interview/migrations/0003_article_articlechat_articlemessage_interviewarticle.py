@@ -8,56 +8,129 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('interview', '0002_imageupload'),
+        ("interview", "0002_imageupload"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Article',
+            name="Article",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=500)),
-                ('url', models.URLField()),
-                ('source', models.CharField(max_length=100)),
-                ('summary', models.TextField()),
-                ('key_highlights', models.JSONField(default=list)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("title", models.CharField(max_length=500)),
+                ("url", models.URLField()),
+                ("source", models.CharField(max_length=100)),
+                ("summary", models.TextField()),
+                ("key_highlights", models.JSONField(default=list)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='ArticleChat',
+            name="ArticleChat",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='chats', to='interview.article')),
-                ('interview', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='article_chats', to='interview.interview')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("is_active", models.BooleanField(default=True)),
+                (
+                    "article",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="chats",
+                        to="interview.article",
+                    ),
+                ),
+                (
+                    "interview",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="article_chats",
+                        to="interview.interview",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ArticleMessage',
+            name="ArticleMessage",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('role', models.CharField(choices=[('user', 'User'), ('assistant', 'Assistant')], max_length=10)),
-                ('content', models.TextField()),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
-                ('chat', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='interview.articlechat')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "role",
+                    models.CharField(
+                        choices=[("user", "User"), ("assistant", "Assistant")],
+                        max_length=10,
+                    ),
+                ),
+                ("content", models.TextField()),
+                ("timestamp", models.DateTimeField(auto_now_add=True)),
+                (
+                    "chat",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="messages",
+                        to="interview.articlechat",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['timestamp'],
+                "ordering": ["timestamp"],
             },
         ),
         migrations.CreateModel(
-            name='InterviewArticle',
+            name="InterviewArticle",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('relevance_score', models.FloatField(default=0.0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='interviews', to='interview.article')),
-                ('interview', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recommended_articles', to='interview.interview')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("relevance_score", models.FloatField(default=0.0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "article",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="interviews",
+                        to="interview.article",
+                    ),
+                ),
+                (
+                    "interview",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="recommended_articles",
+                        to="interview.interview",
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('interview', 'article')},
+                "unique_together": {("interview", "article")},
             },
         ),
     ]

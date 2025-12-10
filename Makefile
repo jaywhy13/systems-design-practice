@@ -65,6 +65,10 @@ stop:
 	@pkill -f "npm start" || echo "Frontend server not running."
 	@echo "All servers stopped."
 
+# Code formatting
+format:
+	@cd backend && poetry run black .
+
 # Cleanup
 clean:
 	@echo "Cleaning up temporary files..."
