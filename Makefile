@@ -67,6 +67,7 @@ stop:
 
 # Code formatting
 format:
+	@cd backend && poetry run isort .
 	@cd backend && poetry run black .
 
 # Cleanup

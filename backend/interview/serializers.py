@@ -1,12 +1,13 @@
 from rest_framework import serializers
+
 from .models import (
-    Interview,
-    Message,
-    ImageUpload,
     Article,
-    InterviewArticle,
     ArticleChat,
     ArticleMessage,
+    ImageUpload,
+    Interview,
+    InterviewArticle,
+    Message,
 )
 
 

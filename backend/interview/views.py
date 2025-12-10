@@ -1,30 +1,32 @@
+import base64
+import os
+
+import requests
+from bs4 import BeautifulSoup
+from django.shortcuts import get_object_or_404
+from dotenv import load_dotenv
+from openai import OpenAI
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from openai import OpenAI
-import os
-import base64
-import requests
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
+
 from .models import (
-    Interview,
-    Message,
-    ImageUpload,
     Article,
-    InterviewArticle,
     ArticleChat,
     ArticleMessage,
+    ImageUpload,
+    Interview,
+    InterviewArticle,
+    Message,
 )
 from .serializers import (
-    InterviewSerializer,
-    CreateInterviewSerializer,
-    SendMessageSerializer,
-    MessageSerializer,
     ArticleChatSerializer,
-    SendArticleMessageSerializer,
     ArticleMessageSerializer,
+    CreateInterviewSerializer,
+    InterviewSerializer,
+    MessageSerializer,
+    SendArticleMessageSerializer,
+    SendMessageSerializer,
 )
 
 load_dotenv()
