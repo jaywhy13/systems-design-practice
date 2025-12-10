@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = ""
+authors = ["Jean-Mark Wright <jeanmark.wright@gmail.com>"]
+license = ""
+readme = ""
+packages = [{ include = "backend" }]
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+Django = "4.2.23"
+djangorestframework = "3.16.1"
+django-cors-headers = "4.7.0"
+openai = "1.102.0"
+python-dotenv = "1.1.1"
+Pillow = "10.4.0"
+requests = "2.31.0"
+beautifulsoup4 = "4.12.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
