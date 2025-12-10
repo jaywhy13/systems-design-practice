@@ -62,124 +62,11 @@ Don't overwhelm the interviewee with too many questions or feedback at once. Add
 
 """
 
-# Article sources
-ARTICLE_SOURCES = {
-    "shopify": "https://shopify.engineering/",
-    "robinhood": "https://newsroom.aboutrobinhood.com/category/engineering/",
-    "pinterest": "https://medium.com/pinterest-engineering",
-}
-
 
 def encode_image_to_base64(image_path):
     """Encode image to base64 for OpenAI API"""
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
-
-
-def generate_article_recommendations(interview):
-    """Generate article recommendations based on interview content"""
-    # Get interview conversation
-    messages = interview.messages.all()
-    conversation_text = " ".join([msg.content for msg in messages])
-
-    # Create prompt for article recommendations
-    recommendation_prompt = f"""
-    Based on this system design interview conversation, recommend 3-5 relevant articles from engineering blogs.
-    
-    Interview Question: {interview.question}
-    Conversation: {conversation_text[:2000]}
-    
-    Please recommend articles that cover concepts discussed in this interview. For each article, provide:
-    1. Title
-    2. URL (from shopify.engineering, newsroom.aboutrobinhood.com/category/engineering/, or medium.com/pinterest-engineering)
-    3. Brief summary (2-3 sentences)
-    4. Key highlights (3-5 bullet points)
-    
-    Format as JSON:
-    {{
-        "articles": [
-            {{
-                "title": "Article Title",
-                "url": "https://...",
-                "source": "shopify|robinhood|pinterest",
-                "summary": "Brief summary...",
-                "key_highlights": ["Point 1", "Point 2", "Point 3"]
-            }}
-        ]
-    }}
-    """
-
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": recommendation_prompt}],
-            max_tokens=1000,
-            temperature=0.7,
-        )
-
-        # Parse the response and create article objects
-        # For now, we'll create some sample articles
-        sample_articles = [
-            {
-                "title": "Building Scalable Systems at Shopify",
-                "url": "https://shopify.engineering/building-scalable-systems",
-                "source": "shopify",
-                "summary": "Learn how Shopify engineers design and implement scalable systems that handle millions of requests daily.",
-                "key_highlights": [
-                    "Microservices architecture patterns",
-                    "Database sharding strategies",
-                    "Caching implementation",
-                    "Load balancing techniques",
-                    "Monitoring and observability",
-                ],
-            },
-            {
-                "title": "Robinhood's Real-Time Trading Infrastructure",
-                "url": "https://newsroom.aboutrobinhood.com/engineering/real-time-trading",
-                "source": "robinhood",
-                "summary": "Explore how Robinhood built a real-time trading platform that processes millions of orders with low latency.",
-                "key_highlights": [
-                    "Real-time data processing",
-                    "Low-latency architecture",
-                    "Order matching algorithms",
-                    "High availability design",
-                    "Security considerations",
-                ],
-            },
-            {
-                "title": "Pinterest's Recommendation Engine",
-                "url": "https://medium.com/pinterest-engineering/recommendation-engine",
-                "source": "pinterest",
-                "summary": "Discover how Pinterest's recommendation system personalizes content for millions of users.",
-                "key_highlights": [
-                    "Machine learning algorithms",
-                    "Personalization strategies",
-                    "A/B testing frameworks",
-                    "Data pipeline architecture",
-                    "Performance optimization",
-                ],
-            },
-        ]
-
-        # Create article objects and link them to the interview
-        for article_data in sample_articles:
-            article, created = Article.objects.get_or_create(
-                url=article_data["url"],
-                defaults={
-                    "title": article_data["title"],
-                    "source": article_data["source"],
-                    "summary": article_data["summary"],
-                    "key_highlights": article_data["key_highlights"],
-                },
-            )
-
-            # Link article to interview
-            InterviewArticle.objects.get_or_create(
-                interview=interview, article=article, defaults={"relevance_score": 0.8}
-            )
-
-    except Exception as e:
-        print(f"Error generating article recommendations: {e}")
 
 
 @api_view(["POST"])
@@ -282,9 +169,6 @@ def end_interview(request, interview_id):
     interview = get_object_or_404(Interview, id=interview_id)
     interview.is_active = False
     interview.save()
-
-    # Generate article recommendations
-    generate_article_recommendations(interview)
 
     return Response(
         {
