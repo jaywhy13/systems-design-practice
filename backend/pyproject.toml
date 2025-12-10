@@ -5,7 +5,7 @@ description = ""
 authors = ["Jean-Mark Wright <jeanmark.wright@gmail.com>"]
 license = ""
 readme = ""
-packages = [{ include = "backend" }]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.10"

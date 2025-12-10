@@ -70,6 +70,14 @@ format:
 	@cd backend && poetry run isort .
 	@cd backend && poetry run black .
 
+update:
+	git pull
+	make stop
+	@cd backend && poetry install
+	@cd frontend && npm install
+	make start-all-background
+
+
 # Cleanup
 clean:
 	@echo "Cleaning up temporary files..."
