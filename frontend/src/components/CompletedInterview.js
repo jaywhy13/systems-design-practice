@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import './CompletedInterview.css';
+import React, { useState, useEffect } from "react";
+import "./CompletedInterview.css";
 
 const CompletedInterview = ({ interview, onBack }) => {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [articleChat, setArticleChat] = useState(null);
-  const [chatInput, setChatInput] = useState('');
+  const [chatInput, setChatInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isRecommendationsExpanded, setIsRecommendationsExpanded] = useState(false);
+  const [isRecommendationsExpanded, setIsRecommendationsExpanded] =
+    useState(false);
 
-  const API_BASE_URL = 'http://localhost:8000/api/interview';
+  const API_BASE_URL = "http://localhost:8000/api/interview";
 
   const startArticleChat = async (article) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/${interview.id}/articles/${article.id}/chat/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${API_BASE_URL}/${interview.id}/articles/${article.id}/chat/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
-      
+      );
+
       if (response.ok) {
         const chatData = await response.json();
         setArticleChat(chatData);
         setSelectedArticle(article);
       }
     } catch (error) {
-      console.error('Error starting article chat:', error);
+      console.error("Error starting article chat:", error);
     }
   };
 
@@ -35,47 +39,50 @@ const CompletedInterview = ({ interview, onBack }) => {
 
     const userMessage = {
       id: Date.now(),
-      role: 'user',
+      role: "user",
       content: chatInput.trim(),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
-    setArticleChat(prev => ({
+    setArticleChat((prev) => ({
       ...prev,
-      messages: [...prev.messages, userMessage]
+      messages: [...prev.messages, userMessage],
     }));
-    setChatInput('');
+    setChatInput("");
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/article-chat/${articleChat.id}/send/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${API_BASE_URL}/article-chat/${articleChat.id}/send/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content: userMessage.content }),
         },
-        body: JSON.stringify({ content: userMessage.content }),
-      });
+      );
 
       if (response.ok) {
         const data = await response.json();
-        setArticleChat(prev => ({
+        setArticleChat((prev) => ({
           ...prev,
-          messages: [...prev.messages, data.ai_response]
+          messages: [...prev.messages, data.ai_response],
         }));
       } else {
-        throw new Error('Failed to send message');
+        throw new Error("Failed to send message");
       }
     } catch (error) {
-      console.error('Error sending article message:', error);
+      console.error("Error sending article message:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const formatTime = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -85,14 +92,14 @@ const CompletedInterview = ({ interview, onBack }) => {
 
   const getSourceIcon = (source) => {
     switch (source) {
-      case 'shopify':
-        return '🛍️';
-      case 'robinhood':
-        return '📈';
-      case 'pinterest':
-        return '📌';
+      case "shopify":
+        return "🛍️";
+      case "robinhood":
+        return "📈";
+      case "pinterest":
+        return "📌";
       default:
-        return '📄';
+        return "📄";
     }
   };
 
@@ -114,17 +121,17 @@ const CompletedInterview = ({ interview, onBack }) => {
         <div className="article-summary">
           <h3>Summary</h3>
           <p>{selectedArticle.summary}</p>
-          
+
           <h3>Key Highlights</h3>
           <ul>
             {selectedArticle.key_highlights.map((highlight, index) => (
               <li key={index}>{highlight}</li>
             ))}
           </ul>
-          
-          <a 
-            href={selectedArticle.url} 
-            target="_blank" 
+
+          <a
+            href={selectedArticle.url}
+            target="_blank"
             rel="noopener noreferrer"
             className="read-article-btn"
           >
@@ -138,11 +145,13 @@ const CompletedInterview = ({ interview, onBack }) => {
             {articleChat.messages.map((message) => (
               <div
                 key={message.id}
-                className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
+                className={`message ${message.role === "user" ? "user-message" : "assistant-message"}`}
               >
                 <div className="message-content">
                   <div className="message-text">{message.content}</div>
-                  <div className="message-time">{formatTime(message.timestamp)}</div>
+                  <div className="message-time">
+                    {formatTime(message.timestamp)}
+                  </div>
                 </div>
               </div>
             ))}
@@ -170,7 +179,7 @@ const CompletedInterview = ({ interview, onBack }) => {
                 rows="1"
                 disabled={isLoading}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
+                  if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     sendArticleMessage(e);
                   }
@@ -211,7 +220,7 @@ const CompletedInterview = ({ interview, onBack }) => {
             {interview.messages.map((message) => (
               <div
                 key={message.id}
-                className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
+                className={`message ${message.role === "user" ? "user-message" : "assistant-message"}`}
               >
                 <div className="message-content">
                   <div className="message-text">{message.content}</div>
@@ -219,16 +228,18 @@ const CompletedInterview = ({ interview, onBack }) => {
                     <div className="message-images">
                       {message.images.map((image, index) => (
                         <div key={index} className="message-image">
-                          <img 
-                            src={image.image} 
+                          <img
+                            src={image.image}
                             alt={`Uploaded image ${index + 1}`}
-                            onClick={() => window.open(image.image, '_blank')}
+                            onClick={() => window.open(image.image, "_blank")}
                           />
                         </div>
                       ))}
                     </div>
                   )}
-                  <div className="message-time">{formatTime(message.timestamp)}</div>
+                  <div className="message-time">
+                    {formatTime(message.timestamp)}
+                  </div>
                 </div>
               </div>
             ))}
@@ -236,9 +247,11 @@ const CompletedInterview = ({ interview, onBack }) => {
         </div>
 
         <div className="recommendations-section">
-          <div 
+          <div
             className="recommendations-header"
-            onClick={() => setIsRecommendationsExpanded(!isRecommendationsExpanded)}
+            onClick={() =>
+              setIsRecommendationsExpanded(!isRecommendationsExpanded)
+            }
           >
             <div className="recommendations-title">
               <h3>Recommended Articles</h3>
@@ -246,17 +259,20 @@ const CompletedInterview = ({ interview, onBack }) => {
                 {interview.recommended_articles.length} articles
               </span>
             </div>
-            <div className={`expand-icon ${isRecommendationsExpanded ? 'expanded' : ''}`}>
+            <div
+              className={`expand-icon ${isRecommendationsExpanded ? "expanded" : ""}`}
+            >
               ▼
             </div>
           </div>
-          
+
           {isRecommendationsExpanded && (
             <div className="recommendations-content">
               <p className="recommendations-intro">
-                Based on your interview discussion, here are some relevant articles to deepen your understanding:
+                Based on your interview discussion, here are some relevant
+                articles to deepen your understanding:
               </p>
-              
+
               <div className="articles-grid">
                 {interview.recommended_articles.map((rec) => (
                   <div key={rec.id} className="article-card">
@@ -264,24 +280,28 @@ const CompletedInterview = ({ interview, onBack }) => {
                       <span className="article-source-icon">
                         {getSourceIcon(rec.article.source)}
                       </span>
-                      <span className="article-source">{rec.article.source}</span>
+                      <span className="article-source">
+                        {rec.article.source}
+                      </span>
                     </div>
-                    
+
                     <h4 className="article-title">{rec.article.title}</h4>
-                    
+
                     <p className="article-summary-text">
                       {rec.article.summary}
                     </p>
-                    
+
                     <div className="article-highlights">
                       <strong>Key Points:</strong>
                       <ul>
-                        {rec.article.key_highlights.slice(0, 3).map((highlight, index) => (
-                          <li key={index}>{highlight}</li>
-                        ))}
+                        {rec.article.key_highlights
+                          .slice(0, 3)
+                          .map((highlight, index) => (
+                            <li key={index}>{highlight}</li>
+                          ))}
                       </ul>
                     </div>
-                    
+
                     <div className="article-actions">
                       <button
                         className="discuss-btn"

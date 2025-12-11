@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import './StartInterview.css';
+import React, { useState } from "react";
+import "./StartInterview.css";
 
 const StartInterview = ({ onStart, onBack }) => {
-  const [question, setQuestion] = useState('');
-  const [selectedPreset, setSelectedPreset] = useState('');
+  const [question, setQuestion] = useState("");
+  const [selectedPreset, setSelectedPreset] = useState("");
 
   const presetQuestions = [
-    'Design YouTube',
-    'Build a URL shortener',
-    'Create a global code deployment system',
-    'Design a chat application',
-    'Build a ride-sharing service',
-    'Design a social media platform',
-    'Create a recommendation system',
-    'Build a payment processing system',
-    'Design a search engine',
-    'Create a content delivery network'
+    "Design YouTube",
+    "Build a URL shortener",
+    "Create a global code deployment system",
+    "Design a chat application",
+    "Build a ride-sharing service",
+    "Design a social media platform",
+    "Create a recommendation system",
+    "Build a payment processing system",
+    "Design a search engine",
+    "Create a content delivery network",
   ];
 
   const handlePresetSelect = (preset) => {
@@ -60,7 +60,7 @@ const StartInterview = ({ onStart, onBack }) => {
                 <button
                   key={preset}
                   type="button"
-                  className={`preset-btn ${selectedPreset === preset ? 'selected' : ''}`}
+                  className={`preset-btn ${selectedPreset === preset ? "selected" : ""}`}
                   onClick={() => handlePresetSelect(preset)}
                 >
                   {preset}
@@ -70,7 +70,11 @@ const StartInterview = ({ onStart, onBack }) => {
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="start-btn" disabled={!question.trim()}>
+            <button
+              type="submit"
+              className="start-btn"
+              disabled={!question.trim()}
+            >
               Start Interview
             </button>
           </div>

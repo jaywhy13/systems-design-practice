@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import './InterviewChat.css';
+import React, { useState, useEffect, useRef } from "react";
+import "./InterviewChat.css";
 
 const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
   const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -21,18 +21,18 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleImageSelect = (files) => {
-    const imageFiles = Array.from(files).filter(file => 
-      file.type.startsWith('image/')
+    const imageFiles = Array.from(files).filter((file) =>
+      file.type.startsWith("image/"),
     );
-    setSelectedImages(prev => [...prev, ...imageFiles]);
+    setSelectedImages((prev) => [...prev, ...imageFiles]);
   };
 
   const removeImage = (index) => {
-    setSelectedImages(prev => prev.filter((_, i) => i !== index));
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleDragOver = (e) => {
@@ -54,58 +54,63 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if ((!inputMessage.trim() && selectedImages.length === 0) || isLoading) return;
+    if ((!inputMessage.trim() && selectedImages.length === 0) || isLoading)
+      return;
 
     const userMessage = {
       id: Date.now(),
-      role: 'user',
+      role: "user",
       content: inputMessage.trim(),
       timestamp: new Date().toISOString(),
-      images: selectedImages.map(img => ({ url: URL.createObjectURL(img) }))
+      images: selectedImages.map((img) => ({ url: URL.createObjectURL(img) })),
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
+    setMessages((prev) => [...prev, userMessage]);
+    setInputMessage("");
     setIsLoading(true);
 
     try {
       const formData = new FormData();
-      formData.append('content', inputMessage.trim());
-      
+      formData.append("content", inputMessage.trim());
+
       selectedImages.forEach((image, index) => {
         formData.append(`images`, image);
       });
 
       const response = await fetch(`${apiBaseUrl}/${interview.id}/send/`, {
-        method: 'POST',
+        method: "POST",
         body: formData,
       });
 
       if (response.ok) {
         const data = await response.json();
-        setMessages(prev => [...prev, data.ai_response]);
+        setMessages((prev) => [...prev, data.ai_response]);
         setSelectedImages([]);
       } else {
-        throw new Error('Failed to send message');
+        throw new Error("Failed to send message");
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       // Add error message to chat
-      setMessages(prev => [...prev, {
-        id: Date.now(),
-        role: 'assistant',
-        content: 'Sorry, there was an error processing your message. Please try again.',
-        timestamp: new Date().toISOString()
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          role: "assistant",
+          content:
+            "Sorry, there was an error processing your message. Please try again.",
+          timestamp: new Date().toISOString(),
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
   };
 
   const formatTime = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -118,7 +123,7 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
         <div className="chat-title">
           <h2>{interview.question}</h2>
           <span className="chat-status">
-            {interview.is_active ? 'Active' : 'Completed'}
+            {interview.is_active ? "Active" : "Completed"}
           </span>
         </div>
         {interview.is_active && (
@@ -132,7 +137,7 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
+            className={`message ${message.role === "user" ? "user-message" : "assistant-message"}`}
           >
             <div className="message-content">
               <div className="message-text">{message.content}</div>
@@ -140,16 +145,20 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
                 <div className="message-images">
                   {message.images.map((image, index) => (
                     <div key={index} className="message-image">
-                      <img 
-                        src={image.url || image.image} 
+                      <img
+                        src={image.url || image.image}
                         alt={`Uploaded image ${index + 1}`}
-                        onClick={() => window.open(image.url || image.image, '_blank')}
+                        onClick={() =>
+                          window.open(image.url || image.image, "_blank")
+                        }
                       />
                     </div>
                   ))}
                 </div>
               )}
-              <div className="message-time">{formatTime(message.timestamp)}</div>
+              <div className="message-time">
+                {formatTime(message.timestamp)}
+              </div>
             </div>
           </div>
         ))}
@@ -175,8 +184,11 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
             <div className="selected-images">
               {selectedImages.map((image, index) => (
                 <div key={index} className="selected-image">
-                  <img src={URL.createObjectURL(image)} alt={`Selected ${index + 1}`} />
-                  <button 
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`Selected ${index + 1}`}
+                  />
+                  <button
                     className="remove-image-btn"
                     onClick={() => removeImage(index)}
                   >
@@ -186,7 +198,7 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
               ))}
             </div>
           )}
-          
+
           <form onSubmit={sendMessage} className="chat-input-form">
             <div className="chat-input-container">
               <textarea
@@ -196,7 +208,7 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
                 rows="1"
                 disabled={isLoading}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
+                  if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     sendMessage(e);
                   }
@@ -204,7 +216,7 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                className={isDragOver ? 'drag-over' : ''}
+                className={isDragOver ? "drag-over" : ""}
               />
               <div className="chat-input-actions">
                 <button
@@ -217,7 +229,10 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
                 </button>
                 <button
                   type="submit"
-                  disabled={(!inputMessage.trim() && selectedImages.length === 0) || isLoading}
+                  disabled={
+                    (!inputMessage.trim() && selectedImages.length === 0) ||
+                    isLoading
+                  }
                   className="send-btn"
                 >
                   Send
@@ -225,14 +240,14 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
               </div>
             </div>
           </form>
-          
+
           <input
             ref={fileInputRef}
             type="file"
             multiple
             accept="image/*"
             onChange={(e) => handleImageSelect(e.target.files)}
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
           />
         </div>
       )}

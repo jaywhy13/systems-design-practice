@@ -43,7 +43,7 @@
   padding: 3rem;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .no-interviews p {
@@ -56,14 +56,14 @@
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
   border: 2px solid transparent;
 }
 
 .interview-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   border-color: #667eea;
 }
 
@@ -74,7 +74,9 @@
   line-height: 1.4;
 }
 
-.interview-date, .interview-status, .message-count {
+.interview-date,
+.interview-status,
+.message-count {
   font-size: 0.9rem;
   color: #666;
   margin: 0.25rem 0;
@@ -84,7 +86,7 @@
   font-weight: 600;
 }
 
-.interview-status:contains('Active') {
+.interview-status:contains("Active") {
   color: #28a745;
 }
 
@@ -127,11 +129,11 @@
     gap: 1rem;
     text-align: center;
   }
-  
+
   .interview-card {
     padding: 1rem;
   }
-  
+
   .interview-info h3 {
     font-size: 1.1rem;
   }

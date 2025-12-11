@@ -37,7 +37,7 @@
   background: white;
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .interview-form {
@@ -141,20 +141,20 @@
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .back-btn {
     margin-right: 0;
     margin-bottom: 0.5rem;
   }
-  
+
   .start-interview-content {
     padding: 1.5rem;
   }
-  
+
   .preset-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .preset-btn {
     white-space: normal;
   }

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import InterviewList from './components/InterviewList';
-import InterviewChat from './components/InterviewChat';
-import StartInterview from './components/StartInterview';
-import CompletedInterview from './components/CompletedInterview';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import InterviewList from "./components/InterviewList";
+import InterviewChat from "./components/InterviewChat";
+import StartInterview from "./components/StartInterview";
+import CompletedInterview from "./components/CompletedInterview";
 
 function App() {
-  const [currentView, setCurrentView] = useState('list'); // 'list', 'chat', 'start', 'completed'
+  const [currentView, setCurrentView] = useState("list"); // 'list', 'chat', 'start', 'completed'
   const [currentInterview, setCurrentInterview] = useState(null);
   const [interviews, setInterviews] = useState([]);
 
@@ -22,80 +22,80 @@ function App() {
       const data = await response.json();
       setInterviews(data);
     } catch (error) {
-      console.error('Error fetching interviews:', error);
+      console.error("Error fetching interviews:", error);
     }
   };
 
   const startNewInterview = async (question) => {
     try {
       const response = await fetch(`${API_BASE_URL}/start/`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ question }),
       });
       const interview = await response.json();
       setCurrentInterview(interview);
-      setCurrentView('chat');
+      setCurrentView("chat");
       fetchInterviews(); // Refresh the list
     } catch (error) {
-      console.error('Error starting interview:', error);
+      console.error("Error starting interview:", error);
     }
   };
 
   const endInterview = async (interviewId) => {
     try {
       await fetch(`${API_BASE_URL}/${interviewId}/end/`, {
-        method: 'POST',
+        method: "POST",
       });
       setCurrentInterview(null);
-      setCurrentView('list');
+      setCurrentView("list");
       fetchInterviews(); // Refresh the list
     } catch (error) {
-      console.error('Error ending interview:', error);
+      console.error("Error ending interview:", error);
     }
   };
 
   const openInterview = (interview) => {
     setCurrentInterview(interview);
     if (interview.is_active) {
-      setCurrentView('chat');
+      setCurrentView("chat");
     } else {
-      setCurrentView('completed');
+      setCurrentView("completed");
     }
   };
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case 'start':
+      case "start":
         return (
           <StartInterview
             onStart={startNewInterview}
-            onBack={() => setCurrentView('list')}
+            onBack={() => setCurrentView("list")}
           />
         );
-      case 'chat':
+      case "chat":
         return (
           <InterviewChat
             interview={currentInterview}
             onEnd={endInterview}
-            onBack={() => setCurrentView('list')}
+            onBack={() => setCurrentView("list")}
             apiBaseUrl={API_BASE_URL}
           />
         );
-      case 'completed':
+      case "completed":
         return (
           <CompletedInterview
             interview={currentInterview}
-            onBack={() => setCurrentView('list')}
+            onBack={() => setCurrentView("list")}
           />
         );
       default:
         return (
           <InterviewList
             interviews={interviews}
-            onStartNew={() => setCurrentView('start')}
+            onStartNew={() => setCurrentView("start")}
             onOpenInterview={openInterview}
           />
         );
@@ -107,9 +107,7 @@ function App() {
       <header className="App-header">
         <h1>System Design Interview Practice</h1>
       </header>
-      <main className="App-main">
-        {renderCurrentView()}
-      </main>
+      <main className="App-main">{renderCurrentView()}</main>
     </div>
   );
 }
