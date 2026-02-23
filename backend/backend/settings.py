@@ -13,8 +13,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+HOSTNAME = os.getenv("HOSTNAME", "localhost")
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,7 +31,7 @@ SECRET_KEY = "django-insecure-wywux7if=!^$#hs7$roc$j48xy=po-+08(7yf6lfb74av4=%0-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["13.222.86.82"]
+ALLOWED_HOSTS = [HOSTNAME]
 
 
 # Application definition
