@@ -77,10 +77,13 @@ const InterviewChat = ({ interview, onEnd, onBack, apiBaseUrl }) => {
         formData.append(`images`, image);
       });
 
-      const response = await fetch(`${apiBaseUrl}/${interview.id}/send/`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${apiBaseUrl}/api/interview/${interview.id}/send/`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
       if (response.ok) {
         const data = await response.json();

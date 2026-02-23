@@ -9,12 +9,12 @@ const CompletedInterview = ({ interview, onBack }) => {
   const [isRecommendationsExpanded, setIsRecommendationsExpanded] =
     useState(false);
 
-  const API_BASE_URL = "http://localhost:8000/api/interview";
+  const API_BASE_URL = process.env.API_BASE_URL;
 
   const startArticleChat = async (article) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/${interview.id}/articles/${article.id}/chat/`,
+        `${API_BASE_URL}/api/interview/${interview.id}/articles/${article.id}/chat/`,
         {
           method: "POST",
           headers: {
@@ -52,16 +52,15 @@ const CompletedInterview = ({ interview, onBack }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/article-chat/${articleChat.id}/send/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ content: userMessage.content }),
+      const url = `${API_BASE_URL}/api/interview/article-chat/${articleChat.id}/send/`;
+      console.log("Sending message to URL:", url);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ content: userMessage.content }),
+      });
 
       if (response.ok) {
         const data = await response.json();

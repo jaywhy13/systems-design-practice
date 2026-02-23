@@ -10,7 +10,7 @@ function App() {
   const [currentInterview, setCurrentInterview] = useState(null);
   const [interviews, setInterviews] = useState([]);
 
-  const API_BASE_URL = "http://13.222.86.82:8000/api/interview";
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     fetchInterviews();
@@ -18,7 +18,7 @@ function App() {
 
   const fetchInterviews = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/list/`);
+      const response = await fetch(`${API_BASE_URL}/api/interview/list/`);
       const data = await response.json();
       setInterviews(data);
     } catch (error) {
@@ -28,7 +28,7 @@ function App() {
 
   const startNewInterview = async (question) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/start/`, {
+      const response = await fetch(`${API_BASE_URL}/api/interview/start/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +46,7 @@ function App() {
 
   const endInterview = async (interviewId) => {
     try {
-      await fetch(`${API_BASE_URL}/${interviewId}/end/`, {
+      await fetch(`${API_BASE_URL}/api/interview/${interviewId}/end/`, {
         method: "POST",
       });
       setCurrentInterview(null);
